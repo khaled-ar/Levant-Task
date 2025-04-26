@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentCreated;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class CommentsController extends Controller
         $comment = Comment::create(
             $request->merge(['user_id' => $request->user()->id])->all()
         );
+        event(new CommentCreated($comment));
         return $this->generalResponse(1, 'Comment Added Successfully.', $comment, 201);
     }
 
